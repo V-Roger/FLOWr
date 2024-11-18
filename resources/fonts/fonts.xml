@@ -1,0 +1,5 @@
+<fonts>
+	<font id="BebasNeueNumbersFont" filename="bebas_numbers.fnt" antialias="true" />
+	<font id="IcoFont" filename="icoFont2.fnt" antialias="true" />
+	<font id="IcoWeatherFont" filename="icoFont_weather3.fnt" antialias="true" />
+</fonts>
