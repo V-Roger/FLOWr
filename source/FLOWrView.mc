@@ -9,7 +9,7 @@ import Toybox.Time.Gregorian;
 
 class FLOWrView extends WatchUi.WatchFace {
     private var ring;
-    private var weather;
+    private var gauges;
     var lastKnownPosition = null;
 
     function initialize() {
@@ -20,12 +20,12 @@ class FLOWrView extends WatchUi.WatchFace {
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
         ring = View.findDrawableById("Ring");
-        weather = View.findDrawableById("WeatherField");
+        gauges = View.findDrawableById("Gauges");
         if (ring != null) {
             ring.setWatch(self);
         }
-        if (weather != null) {
-            weather.setWatch(self);
+        if (gauges != null) {
+            gauges.setWatch(self);
         }
     }
 
