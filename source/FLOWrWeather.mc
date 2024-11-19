@@ -21,7 +21,7 @@ class WeatherField extends WatchUi.Drawable {
 
     units = Application.Properties.getValue("units") == 0 || System.getDeviceSettings().temperatureUnits == System.UNIT_METRIC ? "metric" : "imperial";
 
-    sourceSansProSmallFont = Graphics.FONT_TINY;
+    sourceSansProSmallFont = WatchUi.loadResource(Rez.Fonts.SourceSansProFont);
     weatherFont = WatchUi.loadResource(Rez.Fonts.IcoWeatherFont);
 
     dIcons = {
@@ -205,23 +205,25 @@ class WeatherField extends WatchUi.Drawable {
   function getPressureTrend() as String {
     var value = "";
     var pressure = null;
-    var previousPressure = null;
-
+    var previousMeanPressure = null;
     if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getPressureHistory)) {
-      var history = SensorHistory.getPressureHistory({ :period => 2, :order => SensorHistory.ORDER_NEWEST_FIRST });
+      var history = SensorHistory.getPressureHistory({ :period => 10, :order => SensorHistory.ORDER_NEWEST_FIRST });
       var sample = history.next();
       if ((sample != null) && (sample.data != null)) {
         pressure = sample.data;
-        previousPressure = sample.data;
+        previousMeanPressure = sample.data;
       }
       sample = history.next();
-      if ((sample != null) && (sample.data != null)) {
-        previousPressure = sample.data;
-      }
+    var i = 0;
+      while ((sample != null) && (sample.data != null) && i < 10) {
+        previousMeanPressure = (previousMeanPressure + sample.data) / 2;
+        sample = history.next();
+        i++;
+      } 
 
-      if (pressure > previousPressure) {
+      if (pressure > previousMeanPressure) {
         value = "↗";
-      } else if (pressure < previousPressure) {
+      } else if (pressure < previousMeanPressure) {
         value = "↘";
       } else {
         value = "→";
@@ -290,8 +292,8 @@ class WeatherField extends WatchUi.Drawable {
   
     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
     dc.drawText(
-        outerRadius + Math.cos(Math.PI * 3 / 2) * (outerRadius - 44),
-        outerRadius + Math.sin(Math.PI * 3 / 2) * (outerRadius - 44),
+        outerRadius + Math.cos(Math.PI * 3 / 2) * (44 + 16),
+        outerRadius + Math.sin(Math.PI * 3 / 2) * (44 + 16),
         weatherFont,
         getWeatherIcon(getWeather(), getDayOrNite()),
         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -307,13 +309,13 @@ class WeatherField extends WatchUi.Drawable {
     //   Graphics.TEXT_JUSTIFY_RIGHT| Graphics.TEXT_JUSTIFY_VCENTER
     // );
 
-    // dc.drawText(
-    //     outerRadius + Math.cos(Math.PI * 3 / 2) * (outerRadius - 44),
-    //     outerRadius + Math.sin(Math.PI * 3 / 2) * (outerRadius - 44),
-    //     sourceSansProSmallFont,
-    //     getTemperature(),
-    //     Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
-    // );
+    dc.drawText(
+        outerRadius + Math.cos(Math.PI * 3 / 2) * (outerRadius - 44),
+        outerRadius + Math.sin(Math.PI * 3 / 2) * (outerRadius - 44 + 12),
+        sourceSansProSmallFont,
+        getTemperature() + getPressureTrend(),
+        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+    );
 
     // dc.drawText(
     //   width / 2 + 5,
