@@ -221,7 +221,7 @@ class Gauges extends WatchUi.Drawable {
     }
 
     function getValue(type) as Number {
-        var value = 0;
+        var value = null;
         var info = ActivityMonitor.getInfo();
         
         switch (type) {
@@ -380,7 +380,7 @@ class Gauges extends WatchUi.Drawable {
 
     function getStressLvl() {
         var sample = null;
-        var value = null;
+        var value = 0.0;
 
         if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getStressHistory)) {
             sample = SensorHistory.getStressHistory({:period => 1})
@@ -408,7 +408,7 @@ class Gauges extends WatchUi.Drawable {
     function getWeather() as Number {
         var conditions = Weather.getCurrentConditions();
         if (conditions != null) {
-        return conditions.condition;
+            return conditions.condition;
         }
 
         return Weather.CONDITION_UNKNOWN;
@@ -418,7 +418,7 @@ class Gauges extends WatchUi.Drawable {
         var icon = dayOrNite ? dIcons[condition] : nIcons[condition];
 
         if (icon == null) {
-        return "";
+            return "";
         }
 
         return icon.toChar().toString();
@@ -582,7 +582,7 @@ class Gauges extends WatchUi.Drawable {
             } else {
                 dc.setColor(colors[i], Graphics.COLOR_TRANSPARENT);
                 
-                if (i < moveLvl as Number) {
+                if (i < moveLvl) {
                   dc.drawArc(outerRadius, outerRadius, 44 + padding / 4 + i * thickness / 2, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
                 }
             }
@@ -606,6 +606,15 @@ class Gauges extends WatchUi.Drawable {
 
     function drawGauge(dc as Dc, field, propertyKey as String) as Void {
         var value = getValue(field);
+                
+        if (value == null) {
+            return;
+        }
+
+        if (value == 0) {
+            return;
+        }
+
         var offset = getRadianOffset(propertyKey);
         var arcOffset = getArcOffset(propertyKey);
         var color = getColor(field, value);
@@ -619,16 +628,13 @@ class Gauges extends WatchUi.Drawable {
         var arcLength = 60;
         var gaugeStepsCount = Math.ceil((innerRadius - padding) / gaugeIncrementThickness);
         var maxValue = 100.0;
+
         if (field == STEPS) {
             maxValue = 1.0;
         } else if (field == HEART) {
             var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
             var zone = getHeartRateZone();
             maxValue = zones[5];
-        }
-        
-        if (value == null) {
-            return;
         }
 
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
@@ -660,6 +666,10 @@ class Gauges extends WatchUi.Drawable {
     function drawField(dc as Dc, propertyKey as String) as Void {
         var fieldIdx = Application.Properties.getValue(propertyKey);
         var field = fields[fieldIdx];
+
+        if (field == null) {
+            return;
+        }
 
         if (field == WEATHER) {
             drawWeather(dc, propertyKey);
