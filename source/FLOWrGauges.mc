@@ -474,7 +474,7 @@ class Gauges extends WatchUi.Drawable {
         var fallback = now.hour <= 21 && now.hour >= 6;
         
         if (watch.lastKnownPosition == null) {
-        return fallback;
+            return fallback;
         }
 
         var sunrise = Weather.getSunrise(watch.lastKnownPosition, today); 
@@ -482,7 +482,7 @@ class Gauges extends WatchUi.Drawable {
         var momentNow = new Time.Moment(Time.now().value());
 
         if (sunrise == null || sunset == null) {
-        return fallback;
+            return fallback;
         }
 
         return momentNow.lessThan(sunset) && momentNow.greaterThan(sunrise);
@@ -604,7 +604,7 @@ class Gauges extends WatchUi.Drawable {
         );
     }
 
-    function drawGauge(dc as Dc, field as Number, propertyKey as String) as Void {
+    function drawGauge(dc as Dc, field, propertyKey as String) as Void {
         var value = getValue(field);
         var offset = getRadianOffset(propertyKey);
         var arcOffset = getArcOffset(propertyKey);
@@ -618,7 +618,14 @@ class Gauges extends WatchUi.Drawable {
         var arcStart = 0;
         var arcLength = 60;
         var gaugeStepsCount = Math.ceil((innerRadius - padding) / gaugeIncrementThickness);
-        var maxValue = field == STEPS ? 1.0 : 100.0;
+        var maxValue = 100.0;
+        if (field == STEPS) {
+            maxValue = 1.0;
+        } else if (field == HEART) {
+            var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+            var zone = getHeartRateZone();
+            maxValue = zones[5];
+        }
         
         if (value == null) {
             return;
