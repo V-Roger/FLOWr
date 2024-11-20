@@ -213,6 +213,8 @@ class Gauges extends WatchUi.Drawable {
             return 61234.toChar().toString();  
         case BODYBATTERY:
             return 60247.toChar().toString();
+        case MOVE:
+            return 60973.toChar().toString();
         default:
             return "";
         }
