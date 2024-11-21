@@ -18,6 +18,7 @@ class Gauges extends WatchUi.Drawable {
     private var iconsFont;
     private var weatherFont;
     private var sourceSansProSmallFont;
+    private var innerToOuterPadding = 66;
 
     private var dIcons = {
         Weather.CONDITION_CLEAR => 61054,
@@ -401,11 +402,11 @@ class Gauges extends WatchUi.Drawable {
         var outerRadius = dc.getWidth() / 2;
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(4);
-        dc.drawLine(22, outerRadius, dc.getWidth() - 22, outerRadius);
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(Math.PI / 3) * (outerRadius - 22), outerRadius + Math.sin(Math.PI / 3) * (outerRadius - 22));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(2 * Math.PI / 3) * (outerRadius - 22), outerRadius + Math.sin(2 * Math.PI / 3) * (outerRadius - 22));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(4 * Math.PI / 3) * (outerRadius - 22), outerRadius + Math.sin(4 * Math.PI / 3) * (outerRadius - 22));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(5 * Math.PI / 3) * (outerRadius - 22), outerRadius + Math.sin(5 * Math.PI / 3) * (outerRadius - 22));
+        dc.drawLine(innerToOuterPadding, outerRadius, dc.getWidth() - innerToOuterPadding, outerRadius);
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(Math.PI / 3) * (outerRadius - innerToOuterPadding));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
     }
 
     function getWeather() as Number {
@@ -498,16 +499,16 @@ class Gauges extends WatchUi.Drawable {
     
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (44 + 16),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (44 + 16),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (innerToOuterPadding + 16),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (innerToOuterPadding + 16),
             weatherFont,
             getWeatherIcon(getWeather(), getDayOrNite()),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
         dc.drawText(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - 44 + 12),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding + 12),
             sourceSansProSmallFont,
             getTemperature() + getPressureTrend(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -567,7 +568,7 @@ class Gauges extends WatchUi.Drawable {
         var arcOffset = getArcOffset(propertyKey);
 
         var outerRadius = dc.getWidth() / 2;
-        var innerRadius = outerRadius - 44;
+        var innerRadius = outerRadius - innerToOuterPadding;
         var thickness = (innerRadius / 5).toNumber();
         var padding = thickness;
         var arcStart = 0;
@@ -578,29 +579,29 @@ class Gauges extends WatchUi.Drawable {
         var moveLvl = info.moveBarLevel;
 
         for (var i = 0; i < max; i++) {
-            dc.setPenWidth(thickness);
+            dc.setPenWidth(thickness + 1);
             if (moveLvl == null) {
                 dc.setColor(Application.Properties.getValue("TenderGreen"), Graphics.COLOR_TRANSPARENT);
-                dc.drawArc(outerRadius, outerRadius, 44 + padding / 4 + i * thickness / 2, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + padding / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
             } else {
                 dc.setColor(colors[i], Graphics.COLOR_TRANSPARENT);
                 
                 if (i < moveLvl) {
-                  dc.drawArc(outerRadius, outerRadius, 44 + padding / 4 + i * thickness / 2, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                  dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + padding / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
                 }
             }
         }
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.fillCircle(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - 44),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
             14
         );    
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - 44),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
             iconsFont,
             getIcon(MOVE),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -610,14 +611,14 @@ class Gauges extends WatchUi.Drawable {
     function drawIcon(dc as Dc, field, outerRadius, offset) as Void {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.fillCircle(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - 44),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
             14
         );    
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
-            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - 44),
+            outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
+            outerRadius + Math.sin(offset + Math.PI / 6) * (outerRadius - innerToOuterPadding),
             iconsFont,
             getIcon(field),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -630,7 +631,7 @@ class Gauges extends WatchUi.Drawable {
         var offset = getRadianOffset(propertyKey);
         var arcOffset = getArcOffset(propertyKey);
         var outerRadius = dc.getWidth() / 2;
-        var innerRadius = outerRadius - 44;
+        var innerRadius = outerRadius - innerToOuterPadding;
         var thickness = (innerRadius / 5).toNumber();
         var padding = thickness;
         var gaugeIncrementThickness = Math.floor((thickness + padding) / 4);
@@ -641,6 +642,7 @@ class Gauges extends WatchUi.Drawable {
         if (value != null && value != 0) {
             var color = getColor(field, value);
             var maxValue = 100.0;
+            dc.setPenWidth(thickness + 1);
 
             if (field == STEPS) {
                 maxValue = 1.0;
@@ -654,7 +656,7 @@ class Gauges extends WatchUi.Drawable {
             var j = 0;
             while (j < gaugeStepsCount) {
                 if (value >= (j * maxValue / gaugeStepsCount)) {
-                    dc.drawArc(outerRadius, outerRadius, 44 + j * gaugeIncrementThickness, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                    dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + j * gaugeIncrementThickness, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
                 }
                 j++;
             }
@@ -681,6 +683,9 @@ class Gauges extends WatchUi.Drawable {
     }
 
     function draw(dc as Dc) as Void {
+        var width = dc.getWidth();
+        innerToOuterPadding = width < 300 ? Math.floor(width / 5) : Math.floor(width / 6.67);
+
         dc.setAntiAlias(true);
         drawField(dc, "topLeftMetric");
         drawField(dc, "topMetric");
