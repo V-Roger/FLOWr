@@ -338,8 +338,11 @@ class Gauges extends WatchUi.Drawable {
             return 2;
         } else if (sample < zones[3]) {
             return 3;
+        } else if (sample < zones[4]) {
+            return 4;
         }
-        return 4;
+
+        return 5;
     }
 
     function getRawSteps() as Void {
@@ -604,49 +607,7 @@ class Gauges extends WatchUi.Drawable {
         );
     }
 
-    function drawGauge(dc as Dc, field, propertyKey as String) as Void {
-        var value = getValue(field);
-                
-        if (value == null) {
-            return;
-        }
-
-        if (value == 0) {
-            return;
-        }
-
-        var offset = getRadianOffset(propertyKey);
-        var arcOffset = getArcOffset(propertyKey);
-        var color = getColor(field, value);
-
-        var outerRadius = dc.getWidth() / 2;
-        var innerRadius = outerRadius - 44;
-        var thickness = (innerRadius / 5).toNumber();
-        var padding = thickness;
-        var gaugeIncrementThickness = Math.floor((thickness + padding) / 4);
-        var arcStart = 0;
-        var arcLength = 60;
-        var gaugeStepsCount = Math.ceil((innerRadius - padding) / gaugeIncrementThickness);
-        var maxValue = 100.0;
-
-        if (field == STEPS) {
-            maxValue = 1.0;
-        } else if (field == HEART) {
-            var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
-            var zone = getHeartRateZone();
-            maxValue = zones[5];
-        }
-
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-
-        var j = 0;
-        while (j < gaugeStepsCount) {
-            if (value >= (j * maxValue / gaugeStepsCount)) {
-                dc.drawArc(outerRadius, outerRadius, 44 + j * gaugeIncrementThickness, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
-            }
-            j++;
-        }
-
+    function drawIcon(dc as Dc, field, outerRadius, offset) as Void {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.fillCircle(
             outerRadius + Math.cos(offset + Math.PI / 6) * (outerRadius - 44),
@@ -661,6 +622,45 @@ class Gauges extends WatchUi.Drawable {
             getIcon(field),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+    }
+
+    function drawGauge(dc as Dc, field, propertyKey as String) as Void {
+        var value = getValue(field);     
+
+        var offset = getRadianOffset(propertyKey);
+        var arcOffset = getArcOffset(propertyKey);
+        var outerRadius = dc.getWidth() / 2;
+        var innerRadius = outerRadius - 44;
+        var thickness = (innerRadius / 5).toNumber();
+        var padding = thickness;
+        var gaugeIncrementThickness = Math.floor((thickness + padding) / 4);
+        var arcStart = 0;
+        var arcLength = 60;
+        var gaugeStepsCount = Math.ceil((innerRadius - padding) / gaugeIncrementThickness);
+
+        if (value != null && value != 0) {
+            var color = getColor(field, value);
+            var maxValue = 100.0;
+
+            if (field == STEPS) {
+                maxValue = 1.0;
+            } else if (field == HEART) {
+                var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+                maxValue = zones[5];
+            }
+
+            dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+
+            var j = 0;
+            while (j < gaugeStepsCount) {
+                if (value >= (j * maxValue / gaugeStepsCount)) {
+                    dc.drawArc(outerRadius, outerRadius, 44 + j * gaugeIncrementThickness, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                }
+                j++;
+            }
+
+            drawIcon(dc, field, outerRadius, offset);
+        }
     }
 
     function drawField(dc as Dc, propertyKey as String) as Void {
@@ -682,7 +682,6 @@ class Gauges extends WatchUi.Drawable {
 
     function draw(dc as Dc) as Void {
         dc.setAntiAlias(true);
-
         drawField(dc, "topLeftMetric");
         drawField(dc, "topMetric");
         drawField(dc, "topRightMetric");
