@@ -392,11 +392,11 @@ class Gauges extends WatchUi.Drawable {
         var outerRadius = dc.getWidth() / 2;
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(4);
-        dc.drawLine(innerToOuterPadding, outerRadius, dc.getWidth() - innerToOuterPadding, outerRadius);
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(Math.PI / 3) * (outerRadius - innerToOuterPadding));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
-        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding), outerRadius + Math.sin(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding));
+        dc.drawLine(innerToOuterPadding / 2, outerRadius, dc.getWidth() - innerToOuterPadding / 2, outerRadius);
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(Math.PI / 3) * (outerRadius - innerToOuterPadding / 2), outerRadius + Math.sin(Math.PI / 3) * (outerRadius - innerToOuterPadding / 2));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2), outerRadius + Math.sin(2 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2), outerRadius + Math.sin(4 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2));
+        dc.drawLine(outerRadius, outerRadius, outerRadius + Math.cos(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2), outerRadius + Math.sin(5 * Math.PI / 3) * (outerRadius - innerToOuterPadding / 2));
     }
 
     function getWeather() as Number {
@@ -560,7 +560,6 @@ class Gauges extends WatchUi.Drawable {
         var outerRadius = dc.getWidth() / 2;
         var innerRadius = outerRadius - innerToOuterPadding;
         var thickness = (innerRadius / 5).toNumber();
-        var padding = thickness;
         var arcStart = 0;
         var arcLength = 60;
 
@@ -572,12 +571,12 @@ class Gauges extends WatchUi.Drawable {
             dc.setPenWidth(thickness + 1);
             if (moveLvl == null) {
                 dc.setColor(Application.Properties.getValue("TenderGreen"), Graphics.COLOR_TRANSPARENT);
-                dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + padding / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + thickness / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
             } else {
                 dc.setColor(colors[i], Graphics.COLOR_TRANSPARENT);
                 
                 if (i < moveLvl) {
-                  dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + padding / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
+                  dc.drawArc(outerRadius, outerRadius, innerToOuterPadding + thickness / 4 + i * thickness / 2 + 1, Graphics.ARC_CLOCKWISE, arcStart - arcOffset, arcStart - arcOffset - arcLength);
                 }
             }
         }
@@ -623,11 +622,10 @@ class Gauges extends WatchUi.Drawable {
         var outerRadius = dc.getWidth() / 2;
         var innerRadius = outerRadius - innerToOuterPadding;
         var thickness = (innerRadius / 5).toNumber();
-        var padding = thickness;
-        var gaugeIncrementThickness = Math.floor((thickness + padding) / 4);
+        var gaugeIncrementThickness = Math.floor((2 * thickness) / 3);
         var arcStart = 0;
         var arcLength = 60;
-        var gaugeStepsCount = Math.ceil((innerRadius - padding) / gaugeIncrementThickness);
+        var gaugeStepsCount = Math.ceil((innerRadius - thickness * 3/2) / gaugeIncrementThickness);
 
         if (value != null && value != 0) {
             var color = getColor(field, value);
@@ -642,6 +640,10 @@ class Gauges extends WatchUi.Drawable {
             }
 
             dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+
+            if (value > maxValue) {
+                value = maxValue;
+            }
 
             var j = 0;
             while (j < gaugeStepsCount) {
