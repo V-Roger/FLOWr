@@ -1,5 +1,12 @@
 <settings>
 
+    <setting propertyKey="@Properties.units" title="@Strings.Units" prompt="@Strings.MetricPrompt">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.MetricUnits</listEntry>
+            <listEntry value="1">@Strings.ImperialUnits</listEntry>
+        </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.topLeftMetric" title="@Strings.TopLeftMetric" prompt="@Strings.MetricPrompt">
     <settingConfig type="list">
             <listEntry value="0">@Strings.HeartRate</listEntry>
@@ -7,11 +14,10 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
         </settingConfig>
     </setting>
 
@@ -22,12 +28,11 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="8">@Strings.Weather</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="7">@Strings.Weather</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
         </settingConfig>
     </setting>
 
@@ -38,11 +43,10 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
         </settingConfig>
     </setting>
 
@@ -53,11 +57,10 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
         </settingConfig>
     </setting>
 
@@ -68,12 +71,11 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="8">@Strings.Weather</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="7">@Strings.Weather</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
         </settingConfig>
     </setting>
 
@@ -84,11 +86,10 @@
             <listEntry value="1">@Strings.WatchBattery</listEntry>
             <listEntry value="3">@Strings.Stress</listEntry>
             <listEntry value="5">@Strings.Calories</listEntry>
-            <listEntry value="6">@Strings.Distance</listEntry>
             <listEntry value="4">@Strings.Respiration</listEntry>
-            <listEntry value="7">@Strings.ActiveMinutes</listEntry>
-            <listEntry value="9">@Strings.BodyBattery</listEntry>
-            <listEntry value="10">@Strings.MoveBar</listEntry>
+            <listEntry value="6">@Strings.ActiveMinutes</listEntry>
+            <listEntry value="8">@Strings.BodyBattery</listEntry>
+            <listEntry value="9">@Strings.MoveBar</listEntry>
             </settingConfig>
     </setting>
 

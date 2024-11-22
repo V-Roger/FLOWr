@@ -142,7 +142,6 @@ class Gauges extends WatchUi.Drawable {
         STRESS,
         RESPIRATION,
         CALORIES,
-        DISTANCE,
         ACTIVEMINUTES,
         WEATHER,
         BODYBATTERY,
@@ -156,7 +155,6 @@ class Gauges extends WatchUi.Drawable {
         STRESS,
         RESPIRATION,
         CALORIES,
-        DISTANCE,
         ACTIVEMINUTES,
         WEATHER,
         BODYBATTERY,
@@ -208,8 +206,6 @@ class Gauges extends WatchUi.Drawable {
             return 61315.toChar().toString();
         case CALORIES: 
             return 61226.toChar().toString();
-        case DISTANCE: 
-            return 60860.toChar().toString();
         case ACTIVEMINUTES: 
             return 61234.toChar().toString();  
         case BODYBATTERY:
@@ -243,9 +239,6 @@ class Gauges extends WatchUi.Drawable {
                 break;
             case CALORIES:
                 value = info.calories;
-                break;
-            case DISTANCE:
-                value = info.distance;
                 break;
             case ACTIVEMINUTES:
                 value = info.activeMinutesDay.total;
@@ -295,9 +288,6 @@ class Gauges extends WatchUi.Drawable {
                 break;
             case CALORIES:
                 color = Application.Properties.getValue("GoldenYellow");
-                break;
-            case DISTANCE:
-                color = Application.Properties.getValue("BrightBlue");
                 break;
             case ACTIVEMINUTES:
                 color = Application.Properties.getValue("WarmRed");
